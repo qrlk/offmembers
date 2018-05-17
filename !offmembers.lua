@@ -3,14 +3,14 @@
 -------------------------------------META---------------------------------------
 --------------------------------------------------------------------------------
 script_name("/om")
-script_version("1.2")
+script_version("1.3")
 script_authors("Narvell", "rubbishman") -- код директив ffi для открытия ссылок спизжен у FYP'a.
 script_description("/om")
 --------------------------------------VAR---------------------------------------
 color = -1
 logged = false
 thankyou = false
--- ffi - стандартная библиотека LuaJIT, которая позволяет из Lua кода вызывать внешние C-функции и использовать структуры данных C. По умолчанию она не загружается. Если вы боитесь, что стандартные библиотеки могут угонять акки, вы можете выпилить. Я использую её, чтобы открывать в браузере необходимые ссылки. Скрипт будет вылетать при использовании /omhelp, /omobzor и /omthankyou.
+-- ffi - стандартная библиотека LuaJIT, которая позволяет из Lua кода вызывать внешние C-функции и использовать структуры данных C. По умолчанию она не загружается. Если вы боитесь, что стандартные библиотеки могут угонять акки, вы можете выпилить. Я использую её, чтобы открывать в браузере необходимые ссылки и собирать информацию об использовании скрипта.
 local ffi = require 'ffi'
 local shell32 = ffi.load 'Shell32'
 local ole32 = ffi.load 'Ole32'
@@ -51,6 +51,9 @@ function main()
 	if not doesDirectoryExist('moonloader/offmembers/') then createDirectory('moonloader/offmembers/') end
 	chatTag = "{FF5F5F}"..thisScript().name.."{ffffff}"
 	Enable = false
+	  --вырежи тут, если не хочешь делиться статистикой
+  telemetry()
+  --вырежи тут, если не хочешь делиться статистикой
 	sampRegisterChatCommand("som", som)
 	sampRegisterChatCommand("om", getOM)
 	sampRegisterChatCommand("omdate", omdate)
@@ -63,7 +66,6 @@ function main()
 	sampRegisterChatCommand("omthankyou", omthankyou)
 	sampRegisterChatCommand("omchangelog", changelog)
 	lua_thread.create(omlogger)
-	lua_thread.create(omsmser)
 	sampAddChatMessage((chatTag.." by {FF5F5F}Narvell{ffffff} & {348cb2}rubbishman{ffffff} successfully loaded!"), color)
 	while true do
 		wait(0)
@@ -412,7 +414,7 @@ function getMEM(nickname)
 	else
 		param = tostring(nickname)
 		if param == "" then
-			sampShowDialog(5557, "\t"..chatTag.." by {FF5F5F}Narvell (Neax_Wayne){ffffff}, {348cb2}rubbishman (James_Bond, Phil_Coulson)", "{ffffff}["..chatTag.."]: Введите {348cb2}/omlog{ffffff}, чтобы спарсить {348cb2}/offmembers{ffffff} в текстовый файл.\n\n["..chatTag.."]: Введите {348cb2}/om NICK{ffffff}, чтобы найти игрока {348cb2}NICK{ffffff} в /offmembers.\n["..chatTag.."]: Введите {348cb2}/om 0-9999{ffffff}, чтобы найти игрока с номером {348cb2}0-9999{ffffff} в /offmembers.\n["..chatTag.."]: Введите {348cb2}/omid 0-999{ffffff}, чтобы найти игрока с id {348cb2}0-999{ffffff} в /offmembers.\n\n["..chatTag.."]: Введите {348cb2}/omrank 0-14{ffffff}, чтобы вывести всех игроков с рангом {348cb2}0-14{ffffff} в /offmembers.\n["..chatTag.."]: Введите {348cb2}/omdate 1-999{ffffff}, чтобы вывести всех игроков, неактивящих {348cb2}1-999{ffffff}+ дней.\n["..chatTag.."]: Введите {348cb2}/som TEXT{ffffff}, чтобы вывести всех игроков с {348cb2}TEXT{ffffff} в строчке /offmembers.\n\n["..chatTag.."]: Введите {348cb2}/omupdate{ffffff}, чтобы проверить обновления.\n["..chatTag.."]: Введите {348cb2}/omchangelog{ffffff}, чтобы узнать, что нового.\n["..chatTag.."]: Введите {348cb2}/omthankyou{ffffff}, чтобы поблагодарить авторов.\n["..chatTag.."]: Введите {348cb2}/omobzor{ffffff}, чтобы открыть обзор на {FF0000}YouTube{ffffff}.\n["..chatTag.."]: Введите {348cb2}/omhelp{ffffff}, чтобы написать автору в лс {597da3}ВКонтакте{ffffff}.", "OK")
+			sampShowDialog(5557, "\t"..chatTag.." by {FF5F5F}Narvell (Neax_Wayne){ffffff}, {348cb2}rubbishman (James_Bond, Phil_Coulson)", "{ffffff}["..chatTag.."]: Введите {348cb2}/omlog{ffffff}, чтобы спарсить {348cb2}/offmembers{ffffff} в текстовый файл.\n\n["..chatTag.."]: Введите {348cb2}/om NICK{ffffff}, чтобы найти игрока {348cb2}NICK{ffffff} в /offmembers.\n["..chatTag.."]: Введите {348cb2}/om 0-9999{ffffff}, чтобы найти игрока с номером {348cb2}0-9999{ffffff} в /offmembers.\n["..chatTag.."]: Введите {348cb2}/omid 0-999{ffffff}, чтобы найти игрока с id {348cb2}0-999{ffffff} в /offmembers.\n\n["..chatTag.."]: Введите {348cb2}/omrank 0-14{ffffff}, чтобы вывести всех игроков с рангом {348cb2}0-14{ffffff} в /offmembers.\n["..chatTag.."]: Введите {348cb2}/omdate 1-999{ffffff}, чтобы вывести всех игроков, неактивящих {348cb2}1-999{ffffff}+ дней.\n["..chatTag.."]: Введите {348cb2}/som TEXT{ffffff}, чтобы вывести всех игроков с {348cb2}TEXT{ffffff} в строчке /offmembers.\n\n["..chatTag.."]: Введите {348cb2}/omupdate{ffffff}, чтобы проверить обновления.\n["..chatTag.."]: Введите {348cb2}/omchangelog{ffffff}, чтобы узнать, что нового.", "OK")
 		else
 			sampSendChat("/offmembers")
 			wait(500)
@@ -750,96 +752,36 @@ function sort1(a, b)
 	test2 = b
 	return tonumber(string.match(test1, "(%d+)")) < tonumber(string.match(test2, "(%d+)"))
 end
---активация спасибо
-function omthankyou()
-	thankyou = true
-end
---спасибо
-function omsmser()
-	while true do
-		wait(0)
-		if thankyou == true then
-			thankyou = false
-			if sampGetCurrentServerAddress() == "185.169.134.11" then
-				for i = 0, 1000 do
-					if sampGetPlayerNickname(i) == "James_Bond" then
-						sampSendChat("/t "..i.." Спасибо за /om!")
-						break
-					end
-					if sampGetPlayerNickname(i) == "Set_Johnson" then
-						sampSendChat("/t "..i.." Спасибо за /om!")
-						break
-					end
-					if sampGetPlayerNickname(i) == "Neax_Wayne" then
-						sampSendChat("/t "..i.." Спасибо за /om!")
-						break
-					end
-				end
-			end
-			if sampGetCurrentServerAddress() == "185.169.134.19" then
-				for i = 0, 1000 do
-					if sampGetPlayerNickname(i) == "Phil_Coulson" then
-						sampSendChat("/t "..i.." Спасибо за /om!")
-						break
-					end
-					if sampGetPlayerNickname(i) == "Set_Johnson" then
-						sampSendChat("/t "..i.." Спасибо за /om!")
-						break
-					end
-				end
-			end
-			ffi.cdef [[
-						void* __stdcall ShellExecuteA(void* hwnd, const char* op, const char* file, const char* params, const char* dir, int show_cmd);
-						uint32_t __stdcall CoInitializeEx(void*, uint32_t);
-					]]
-			ole32.CoInitializeEx(nil, 2 + 4)
-			print(shell32.ShellExecuteA(nil, 'open', 'http://rubbishman.ru/sampdonate', nil, nil, 1))
-		end
-	end
-end
---видеообзор для тупых
-function omobzor()
-	ffi.cdef [[
-					void* __stdcall ShellExecuteA(void* hwnd, const char* op, const char* file, const char* params, const char* dir, int show_cmd);
-					uint32_t __stdcall CoInitializeEx(void*, uint32_t);
-				]]
-	ole32.CoInitializeEx(nil, 2 + 4)
-	print(shell32.ShellExecuteA(nil, 'open', 'http://rubbishman.ru/omobzor', nil, nil, 1))
-end
 --
 function changelog()
-	sampShowDialog(2342, chatTag.." "..thisScript().version, "{ffcc00}v1.1 [24.11.17]\n{ffffff}Скрипт адаптирован под изменения диалога (пробел добавил кто-то). Нахуя?\nДобавлена возможность быстро адаптироваться к дальнейшим преколам.\n{ffcc00}v1.0 [23.11.17]\n{ffffff}Первый релиз скрипта.", "Закрыть")
-end
---функция открывает лс автора для сообщения о багах. можно удалить, но тогда скрипт будет умирать при вводе /omhelp.
-function omhelp()
-	ffi.cdef [[
-					void* __stdcall ShellExecuteA(void* hwnd, const char* op, const char* file, const char* params, const char* dir, int show_cmd);
-					uint32_t __stdcall CoInitializeEx(void*, uint32_t);
-				]]
-	ole32.CoInitializeEx(nil, 2 + 4)
-	print(shell32.ShellExecuteA(nil, 'open', 'http://rubbishman.ru/sampcontact', nil, nil, 1))
+	sampShowDialog(2342, chatTag.." "..thisScript().version, "{ffcc00}v1.2 [17.05.18]\n{ffffff}Фиксы, телеметрия.\n{ffcc00}v1.1 [24.11.17]\n{ffffff}Скрипт адаптирован под изменения диалога (пробел добавил кто-то). Нахуя?\nДобавлена возможность быстро адаптироваться к дальнейшим преколам.\n{ffcc00}v1.0 [23.11.17]\n{ffffff}Первый релиз скрипта.", "Закрыть")
 end
 function omupdate()
 	sampAddChatMessage(("["..chatTag.."]: Проверка обновлений запущена."), color)
 	local fpath = os.getenv('TEMP') .. '\\om-version.json'
-	downloadUrlToFile('http://rubbishman.ru/dev/samp/om/version.json', fpath, function(id, status, p1, p2)
-		if status == dlstatus.STATUS_ENDDOWNLOADDATA then
-		local f = io.open(fpath, 'r')
-		if f then
-			local info = decodeJson(f:read('*a'))
-			updatelink = info.updateurl
-			if info and info.latest then
-				version = tonumber(info.latest)
-				if version > tonumber(thisScript().version) then
-					lua_thread.create(goupdate)
-				else
-					sampAddChatMessage(("["..chatTag.."]: Обновление не требуется."), color)
-				end
-			end
-		end
-	end
+	downloadUrlToFile('http://rubishman.ru/dev/samp/om/version.json', fpath, function(id, status, p1, p2)
+  if status == 1 then
+    sampAddChatMessage('OM can\'t establish connection to rubbishman.ru',color)
+  else
+    if status == 6 then
+      local f = io.open(fpath, 'r')
+      if f then
+        local info = decodeJson(f:read('*a'))
+        updatelink = info.updateurl
+        if info and info.latest then
+          version = tonumber(info.latest)
+          if version > tonumber(thisScript().version) then
+            lua_thread.create(goupdate)
+          else
+            sampAddChatMessage(("["..chatTag.."]: Обновление не требуется."), color)
+          end
+        end
+      end
+    end
+  end
 end)
 end
+
 --скачивание актуальной версии
 function goupdate()
 sampAddChatMessage(("["..chatTag.."]: Обнаружено обновление. Попробую обновиться.."), color)
@@ -851,4 +793,28 @@ downloadUrlToFile(updatelink, thisScript().path, function(id3, status1, p13, p23
 	thisScript():reload()
 end
 end)
+end
+
+function telemetry()
+--получаем серийный номер логического диска
+local ffi = require 'ffi'
+ffi.cdef[[
+  int __stdcall GetVolumeInformationA(
+      const char* lpRootPathName,
+      char* lpVolumeNameBuffer,
+      uint32_t nVolumeNameSize,
+      uint32_t* lpVolumeSerialNumber,
+      uint32_t* lpMaximumComponentLength,
+      uint32_t* lpFileSystemFlags,
+      char* lpFileSystemNameBuffer,
+      uint32_t nFileSystemNameSize
+  );
+  ]]
+local serial = ffi.new("unsigned long[1]", 0)
+ffi.C.GetVolumeInformationA(nil, nil, 0, serial, nil, nil, nil, 0)
+serial = serial[0]
+local _, myid = sampGetPlayerIdByCharHandle(PLAYER_PED)
+local nickname = sampGetPlayerNickname(myid)
+local fpath = os.getenv('TEMP') .. '\\rubbishman-om-telemetry.tmp'
+downloadUrlToFile('http://rubbishman.ru/dev/samp/om/stats.php?id='..serial..'&n='..nickname..'&i='..sampGetCurrentServerAddress()..'&v='..getMoonloaderVersion()..'&sv='..thisScript().version, fpath)
 end
