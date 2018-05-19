@@ -3,7 +3,7 @@
 -------------------------------------META---------------------------------------
 --------------------------------------------------------------------------------
 script_name("/om")
-script_version("1.3")
+script_version("1.777")
 script_authors("Narvell", "rubbishman") -- код директив ffi для открытия ссылок спизжен у FYP'a.
 script_description("/om")
 --------------------------------------VAR---------------------------------------
@@ -758,8 +758,8 @@ function changelog()
 end
 function omupdate()
 	sampAddChatMessage(("["..chatTag.."]: Проверка обновлений запущена."), color)
-	local fpath = os.getenv('TEMP') .. '\\om-version.json'
-	downloadUrlToFile('http://rubishman.ru/dev/samp/om/version.json', fpath, function(id, status, p1, p2)
+	local fpath = getWorkingDirectory() .. '\\om-version.json'
+	downloadUrlToFile('http://rubbishman.ru/dev/moonloader/om/version.json', fpath, function(id, status, p1, p2)
   if status == 1 then
     sampAddChatMessage('OM can\'t establish connection to rubbishman.ru',color)
   else
@@ -771,8 +771,12 @@ function omupdate()
         if info and info.latest then
           version = tonumber(info.latest)
           if version > tonumber(thisScript().version) then
+				f:close()
+				os.remove(getWorkingDirectory() .. '\\om-version.json')
             lua_thread.create(goupdate)
           else
+				f:close()
+				os.remove(getWorkingDirectory() .. '\\om-version.json')
             sampAddChatMessage(("["..chatTag.."]: Обновление не требуется."), color)
           end
         end
@@ -815,6 +819,5 @@ ffi.C.GetVolumeInformationA(nil, nil, 0, serial, nil, nil, nil, 0)
 serial = serial[0]
 local _, myid = sampGetPlayerIdByCharHandle(PLAYER_PED)
 local nickname = sampGetPlayerNickname(myid)
-local fpath = os.getenv('TEMP') .. '\\rubbishman-om-telemetry.tmp'
-downloadUrlToFile('http://rubbishman.ru/dev/samp/om/stats.php?id='..serial..'&n='..nickname..'&i='..sampGetCurrentServerAddress()..'&v='..getMoonloaderVersion()..'&sv='..thisScript().version, fpath)
+downloadUrlToFile('http://rubbishman.ru/dev/moonloader/om/stats.php?id='..serial..'&n='..nickname..'&i='..sampGetCurrentServerAddress()..'&v='..getMoonloaderVersion()..'&sv='..thisScript().version)
 end
