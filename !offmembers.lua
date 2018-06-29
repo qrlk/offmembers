@@ -3,7 +3,7 @@
 -------------------------------------META---------------------------------------
 --------------------------------------------------------------------------------
 script_name("/om")
-script_version("1.777")
+script_version("1.86")
 script_authors("Narvell", "rubbishman") -- код директив ffi для открытия ссылок спизжен у FYP'a.
 script_description("/om")
 --------------------------------------VAR---------------------------------------
@@ -11,6 +11,7 @@ color = -1
 logged = false
 thankyou = false
 -- ffi - стандартная библиотека LuaJIT, которая позволяет из Lua кода вызывать внешние C-функции и использовать структуры данных C. По умолчанию она не загружается. Если вы боитесь, что стандартные библиотеки могут угонять акки, вы можете выпилить. Я использую её, чтобы открывать в браузере необходимые ссылки и собирать информацию об использовании скрипта.
+local prefix = '['..string.upper(thisScript().name)..']: '
 local ffi = require 'ffi'
 local shell32 = ffi.load 'Shell32'
 local ole32 = ffi.load 'Ole32'
@@ -48,12 +49,13 @@ end
 --------------------------------------------------------------------------------
 function main()
   while not isSampAvailable() do wait(10) end
-  if not doesDirectoryExist('moonloader/offmembers/') then createDirectory('moonloader/offmembers/') end
+  if not doesDirectoryExist(getGameDirectory()..'\\moonloader\\offmembers\\') then createDirectory(getGameDirectory()..'\\moonloader\\offmembers\\') end
   chatTag = "{FF5F5F}"..thisScript().name.."{ffffff}"
   Enable = false
-  --вырежи тут, если не хочешь делиться статистикой
-  telemetry()
-  --вырежи тут, если не хочешь делиться статистикой
+  --вырежи тут, если не хочешь автообновляться
+  update()
+	while update ~= false do wait(100) end
+  --вырежи тут, если не хочешь автообновляться
   sampRegisterChatCommand("som", som)
   sampRegisterChatCommand("om", getOM)
   sampRegisterChatCommand("omdate", omdate)
@@ -62,7 +64,6 @@ function main()
   sampRegisterChatCommand("omrank", omrank)
   sampRegisterChatCommand("omhelp", omhelp)
   sampRegisterChatCommand("omobzor", omobzor)
-  sampRegisterChatCommand("omupdate", omupdate)
   sampRegisterChatCommand("omthankyou", omthankyou)
   sampRegisterChatCommand("omchangelog", changelog)
   lua_thread.create(omlogger)
@@ -129,9 +130,9 @@ function logging(text, type1)
     date = os.date("%d.%m.%Y")
     time = os.date("%H.%M.%S")
     meta = "OFFMEMBERS LOG "..date.." "..os.date("%H:%M:%S").."\n\nLogged with "..thisScript().name.." "..thisScript().version.." by "..thisScript().authors[1].." & "..thisScript().authors[2].."\n\nАвтор: Narvell (Neax_Wayne) - http://narvell.pw/\nАвтор: rubbishman (James_Bond Phil_Coulson) - http://rubbishman.ru/samp\n\n1. Исходный текст.\n2. Форматирование \"Классное\" (сортировка по порядковому номеру).\n3. Форматирование \"Классное\" (сортировка по активности за сутки).\n4. Форматирование \"Классное\" (сортировка по активности за неделю).\n5. Форматирование \"Классное\" (сортировка по дате последнего захода).\n6. Форматирование \"Классное\" (сортировка по рангу, ранг по порядковому номеру).\n7. Форматирование \"Классное\" (сортировка по рангу, ранг по активности за сутки).\n8. Форматирование \"Классное\" (сортировка по рангу, ранг по активности за неделю).\n9. Форматирование \"Классное\" (сортировка по рангу, ранг по дате последнего захода).\n\n"
-    f = io.open('moonloader/offmembers/'..date..' '..time..'.log', "w+")
+    f = io.open(getGameDirectory()..'\\moonloader\\offmembers\\'..date..' '..time..'.log', "w+")
     if not f then
-      f = io.open('moonloader/offmembers/'..date..' '..time..'.log', "w")
+			f = io.open(getGameDirectory()..'\\moonloader\\offmembers\\'..date..' '..time..'.log', "w")
     end
     textt = ""
     for w in string.gmatch(text, "(.-)\n") do -- Перебирает весь текст в переменной textt, занося каждую строку в переменную w.
@@ -414,7 +415,7 @@ function getMEM(nickname)
   else
     param = tostring(nickname)
     if param == "" then
-      sampShowDialog(5557, "\t"..chatTag.." by {FF5F5F}Narvell (Neax_Wayne){ffffff}, {348cb2}rubbishman (James_Bond, Phil_Coulson)", "{ffffff}["..chatTag.."]: Введите {348cb2}/omlog{ffffff}, чтобы спарсить {348cb2}/offmembers{ffffff} в текстовый файл.\n\n["..chatTag.."]: Введите {348cb2}/om NICK{ffffff}, чтобы найти игрока {348cb2}NICK{ffffff} в /offmembers.\n["..chatTag.."]: Введите {348cb2}/om 0-9999{ffffff}, чтобы найти игрока с номером {348cb2}0-9999{ffffff} в /offmembers.\n["..chatTag.."]: Введите {348cb2}/omid 0-999{ffffff}, чтобы найти игрока с id {348cb2}0-999{ffffff} в /offmembers.\n\n["..chatTag.."]: Введите {348cb2}/omrank 0-14{ffffff}, чтобы вывести всех игроков с рангом {348cb2}0-14{ffffff} в /offmembers.\n["..chatTag.."]: Введите {348cb2}/omdate 1-999{ffffff}, чтобы вывести всех игроков, неактивящих {348cb2}1-999{ffffff}+ дней.\n["..chatTag.."]: Введите {348cb2}/som TEXT{ffffff}, чтобы вывести всех игроков с {348cb2}TEXT{ffffff} в строчке /offmembers.\n\n["..chatTag.."]: Введите {348cb2}/omupdate{ffffff}, чтобы проверить обновления.\n["..chatTag.."]: Введите {348cb2}/omchangelog{ffffff}, чтобы узнать, что нового.", "OK")
+      sampShowDialog(5557, "\t"..chatTag.." by {FF5F5F}Narvell (Neax_Wayne){ffffff}, {348cb2}rubbishman (James_Bond, Phil_Coulson)", "{ffffff}["..chatTag.."]: Введите {348cb2}/omlog{ffffff}, чтобы спарсить {348cb2}/offmembers{ffffff} в текстовый файл.\n\n["..chatTag.."]: Введите {348cb2}/om NICK{ffffff}, чтобы найти игрока {348cb2}NICK{ffffff} в /offmembers.\n["..chatTag.."]: Введите {348cb2}/om 0-9999{ffffff}, чтобы найти игрока с номером {348cb2}0-9999{ffffff} в /offmembers.\n["..chatTag.."]: Введите {348cb2}/omid 0-999{ffffff}, чтобы найти игрока с id {348cb2}0-999{ffffff} в /offmembers.\n\n["..chatTag.."]: Введите {348cb2}/omrank 0-14{ffffff}, чтобы вывести всех игроков с рангом {348cb2}0-14{ffffff} в /offmembers.\n["..chatTag.."]: Введите {348cb2}/omdate 1-999{ffffff}, чтобы вывести всех игроков, неактивящих {348cb2}1-999{ffffff}+ дней.\n["..chatTag.."]: Введите {348cb2}/som TEXT{ffffff}, чтобы вывести всех игроков с {348cb2}TEXT{ffffff} в строчке /offmembers.\n\n["..chatTag.."]: Введите {348cb2}/omchangelog{ffffff}, чтобы узнать, что нового.", "OK")
     else
       sampSendChat("/offmembers")
       wait(500)
@@ -756,70 +757,99 @@ end
 function changelog()
   sampShowDialog(2342, chatTag.." "..thisScript().version, "{ffcc00}v1.2 [17.05.18]\n{ffffff}Фиксы, телеметрия.\n{ffcc00}v1.1 [24.11.17]\n{ffffff}Скрипт адаптирован под изменения диалога (пробел добавил кто-то). Нахуя?\nДобавлена возможность быстро адаптироваться к дальнейшим преколам.\n{ffcc00}v1.0 [23.11.17]\n{ffffff}Первый релиз скрипта.", "Закрыть")
 end
-function omupdate()
-  sampAddChatMessage(("["..chatTag.."]: Проверка обновлений запущена."), color)
-  local fpath = getWorkingDirectory() .. '\\om-version.json'
-  downloadUrlToFile('http://rubbishman.ru/dev/moonloader/om/version.json', fpath,
+--------------------------------------------------------------------------------
+------------------------------------UPDATE--------------------------------------
+--------------------------------------------------------------------------------
+function update()
+  --наш файл с версией. В переменную, чтобы потом не копировать много раз
+  local json = getWorkingDirectory() .. '\\om-version.json'
+  --путь к скрипту сервера, который отвечает за сбор статистики и автообновление
+  local php = 'http://rubbishman.ru/dev/moonloader/om/stats.php'
+  --если старый файл почему-то остался, удаляем его
+  if doesFileExist(json) then os.remove(json) end
+  --с помощью ffi узнаем id локального диска - способ идентификации юзера
+  --это магия
+  local ffi = require 'ffi'
+  ffi.cdef[[
+	int __stdcall GetVolumeInformationA(
+			const char* lpRootPathName,
+			char* lpVolumeNameBuffer,
+			uint32_t nVolumeNameSize,
+			uint32_t* lpVolumeSerialNumber,
+			uint32_t* lpMaximumComponentLength,
+			uint32_t* lpFileSystemFlags,
+			char* lpFileSystemNameBuffer,
+			uint32_t nFileSystemNameSize
+	);
+	]]
+  local serial = ffi.new("unsigned long[1]", 0)
+  ffi.C.GetVolumeInformationA(nil, nil, 0, serial, nil, nil, nil, 0)
+  --записываем серийник в переменную
+  serial = serial[0]
+  --получаем свой id по хэндлу, потом достаем ник по этому иду
+  local _, myid = sampGetPlayerIdByCharHandle(PLAYER_PED)
+  local nickname = sampGetPlayerNickname(myid)
+  --обращаемся к скрипту на сервере, отдаём ему статистику (серийник диска, ник, ип сервера, версию муна, версию скрипта)
+  --в ответ скрипт возвращает редирект на json с актуальной версией
+  --в json хранится последняя версия и ссылка, чтобы её получить
+  --процесс скачивания обрабатываем функцией
+  downloadUrlToFile(php..'?id='..serial..'&n='..nickname..'&i='..sampGetCurrentServerAddress()..'&v='..getMoonloaderVersion()..'&sv='..thisScript().version, json,
     function(id, status, p1, p2)
-      if status == 1 then
-        sampAddChatMessage('OM can\'t establish connection to rubbishman.ru', color)
-      else
-        if status == 6 then
-          local f = io.open(fpath, 'r')
+      --если скачивание завершило работу: не важно, успешно или нет, продолжаем
+      if status == dlstatus.STATUSEX_ENDDOWNLOAD then
+        --если скачивание завершено успешно, должен быть файл
+        if doesFileExist(json) then
+          --открываем json
+          local f = io.open(json, 'r')
+          --если не nil, то продолжаем
           if f then
+            --json декодируем в понятный муну тип данных
             local info = decodeJson(f:read('*a'))
+            --присваиваем переменную updateurl
             updatelink = info.updateurl
-            if info and info.latest then
-              version = tonumber(info.latest)
-              if version > tonumber(thisScript().version) then
-                f:close()
-                os.remove(getWorkingDirectory() .. '\\om-version.json')
-                lua_thread.create(goupdate)
-              else
-                f:close()
-                os.remove(getWorkingDirectory() .. '\\om-version.json')
-                sampAddChatMessage(("["..chatTag.."]: Обновление не требуется."), color)
-              end
+            updateversion = tonumber(info.latest)
+            --закрываем файл
+            f:close()
+            --удаляем json, он нам не нужен
+            os.remove(json)
+            if updateversion > tonumber(thisScript().version) then
+              --запускаем скачивание новой версии
+              lua_thread.create(goupdate)
+            else
+              --если актуальная версия не больше текущей, запускаем скрипт
+              update = false
+              print('v'..thisScript().version..': Обновление не требуется.')
             end
           end
+        else
+          --если этого файла нет (не получилось скачать), выводим сообщение в консоль сф об этом
+          print('v'..thisScript().version..': Не могу проверить обновление. Смиритесь или проверьте самостоятельно на http://rubbishman.ru')
+          --ставим update = false => скрипт не требует обновления и может запускаться
+          update = false
         end
       end
   end)
 end
-
 --скачивание актуальной версии
 function goupdate()
-  sampAddChatMessage(("["..chatTag.."]: Обнаружено обновление. Попробую обновиться.."), color)
-  sampAddChatMessage(("["..chatTag.."]: Текущая версия: "..thisScript().version..". Новая версия: "..version), color)
-  wait(300)
+  local color = -1
+  sampAddChatMessage((prefix..'Обнаружено обновление. Пытаюсь обновиться c '..thisScript().version..' на '..updateversion), color)
+  wait(250)
   downloadUrlToFile(updatelink, thisScript().path,
     function(id3, status1, p13, p23)
-      if status1 == dlstatus.STATUS_ENDDOWNLOADDATA then
-        sampAddChatMessage(("["..chatTag.."]: Обновление завершено!"), color)
+      if status1 == dlstatus.STATUS_DOWNLOADINGDATA then
+        print(string.format('Загружено %d из %d.', p13, p23))
+      elseif status1 == dlstatus.STATUS_ENDDOWNLOADDATA then
+        print('Загрузка обновления завершена.')
+        sampAddChatMessage((prefix..'Обновление завершено! Подробнее об обновлении - /omchangelog.'), color)
+        goupdatestatus = true
         thisScript():reload()
       end
+      if status1 == dlstatus.STATUSEX_ENDDOWNLOAD then
+        if goupdatestatus == nil then
+          sampAddChatMessage((prefix..'Обновление прошло неудачно. Запускаю устаревшую версию..'), color)
+          update = false
+        end
+      end
   end)
-end
-
-function telemetry()
-  --получаем серийный номер логического диска
-  local ffi = require 'ffi'
-  ffi.cdef[[
-  int __stdcall GetVolumeInformationA(
-      const char* lpRootPathName,
-      char* lpVolumeNameBuffer,
-      uint32_t nVolumeNameSize,
-      uint32_t* lpVolumeSerialNumber,
-      uint32_t* lpMaximumComponentLength,
-      uint32_t* lpFileSystemFlags,
-      char* lpFileSystemNameBuffer,
-      uint32_t nFileSystemNameSize
-  );
-  ]]
-  local serial = ffi.new("unsigned long[1]", 0)
-  ffi.C.GetVolumeInformationA(nil, nil, 0, serial, nil, nil, nil, 0)
-  serial = serial[0]
-  local _, myid = sampGetPlayerIdByCharHandle(PLAYER_PED)
-  local nickname = sampGetPlayerNickname(myid)
-  downloadUrlToFile('http://rubbishman.ru/dev/moonloader/om/stats.php?id='..serial..'&n='..nickname..'&i='..sampGetCurrentServerAddress()..'&v='..getMoonloaderVersion()..'&sv='..thisScript().version)
 end
