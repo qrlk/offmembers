@@ -3,15 +3,16 @@
 К счастью, новый /offmembers легко спарсить, для чего и был написан этот скрипт.  
 Скрипт предназначен для лидеров/замов Samp-Rp. С ним у вас появится возможность сохранять /offmembers в .log с кучей разных сортировок, искать игрока в /offmembers по нику, порядковому номеру или ID, выводить списки игроков с заданным рангом / списки неактивщиков, искать по всему оффмемберсу нужных вам людей. Забудьте про пролистывание страниц.  
 
-**Требования:** [CLEO 4.3](http://cleo.li/?lang=ru), [SAMPFUNCS 5.3.3](https://blast.hk/threads/17/), [MoonLoader](https://blast.hk/threads/13305/).  
+**Требования:** [CLEO 4+](http://cleo.li/?lang=ru), [SAMPFUNCS 5.3.3](https://blast.hk/threads/17/), [MoonLoader](https://blast.hk/threads/13305/).  
 **Активация:** Скрипт активируется автоматически.
 
 * /om - открыть диалог скрипта с командами.
 
-**Автор:** [rubbishman (James_Bond / Phil_Coulson)](http://rubbishman.ru/samp).
+**Автор:** [qrlk (James_Bond / Phil_Coulson)](http://rubbishman.ru/samp).  
+**Обсуждение в группе VK:** [ссылка](https://vk.com/topic-168860334_38597264).
 
 # Скриншоты
-![https://i.imgur.com/2csUPN3.jpg?1](https://i.imgur.com/2csUPN3.jpg?1)  
+![https://i.imgur.com/YmkhAn2.png](https://i.imgur.com/YmkhAn2.png)  
 ![https://i.imgur.com/dPALth7.jpg?2](https://i.imgur.com/dPALth7.jpg?2)  
 ![https://i.imgur.com/1SVqSJ5.jpg?1](https://i.imgur.com/1SVqSJ5.jpg?1)  
 ![https://i.imgur.com/C98oG1I.jpg?2](https://i.imgur.com/C98oG1I.jpg?2)  
