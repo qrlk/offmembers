@@ -1,11 +1,22 @@
+--Больше скриптов от автора можно найти в группе ВК: http://vk.com/qrlk.mods
 --Больше скриптов от автора можно найти на сайте: http://www.rubbishman.ru/samp
 --------------------------------------------------------------------------------
 -------------------------------------META---------------------------------------
 --------------------------------------------------------------------------------
 script_name("/om")
-script_version("1.86")
-script_authors("Narvell", "rubbishman") -- код директив ffi для открытия ссылок спизжен у FYP'a.
+script_version("1.88")
+script_authors("Narvell", "qrlk") -- код директив ffi для открытия ссылок спизжен у FYP'a.
 script_description("/om")
+script_changelog = [[{ffcc00}v1.88 [15.07.18]{ffffff}
+1. Ребрендинг, группа вк. Серьёзно, подписывайтесь.
+2. Теперь changelog можно прочитать, открыв файл блокнотом.
+{ffcc00}v1.2 [17.05.18]{ffffff}
+1. Фиксы, телеметрия.
+{ffcc00}v1.1 [24.11.17]{ffffff}
+1. Скрипт адаптирован под изменения диалога (пробел добавил кто-то). Нахуя?
+2. Добавлена возможность быстро адаптироваться к дальнейшим преколам.
+{ffcc00}v1.0 [23.11.17]{ffffff}
+1. Первый релиз скрипта]]
 --------------------------------------VAR---------------------------------------
 color = -1
 logged = false
@@ -67,7 +78,7 @@ function main()
   sampRegisterChatCommand("omthankyou", omthankyou)
   sampRegisterChatCommand("omchangelog", changelog)
   lua_thread.create(omlogger)
-  sampAddChatMessage((chatTag.." by {FF5F5F}Narvell{ffffff} & {348cb2}rubbishman{ffffff} successfully loaded!"), color)
+  sampAddChatMessage((chatTag.." by {FF5F5F}Narvell{ffffff} & {348cb2}qrlk{ffffff} successfully loaded!"), color)
   while true do
     wait(0)
   end
@@ -129,7 +140,7 @@ function logging(text, type1)
     local x = os.clock()
     date = os.date("%d.%m.%Y")
     time = os.date("%H.%M.%S")
-    meta = "OFFMEMBERS LOG "..date.." "..os.date("%H:%M:%S").."\n\nLogged with "..thisScript().name.." "..thisScript().version.." by "..thisScript().authors[1].." & "..thisScript().authors[2].."\n\nАвтор: Narvell (Neax_Wayne) - http://narvell.pw/\nАвтор: rubbishman (James_Bond Phil_Coulson) - http://rubbishman.ru/samp\n\n1. Исходный текст.\n2. Форматирование \"Классное\" (сортировка по порядковому номеру).\n3. Форматирование \"Классное\" (сортировка по активности за сутки).\n4. Форматирование \"Классное\" (сортировка по активности за неделю).\n5. Форматирование \"Классное\" (сортировка по дате последнего захода).\n6. Форматирование \"Классное\" (сортировка по рангу, ранг по порядковому номеру).\n7. Форматирование \"Классное\" (сортировка по рангу, ранг по активности за сутки).\n8. Форматирование \"Классное\" (сортировка по рангу, ранг по активности за неделю).\n9. Форматирование \"Классное\" (сортировка по рангу, ранг по дате последнего захода).\n\n"
+    meta = "OFFMEMBERS LOG "..date.." "..os.date("%H:%M:%S").."\n\nLogged with "..thisScript().name.." "..thisScript().version.." by "..thisScript().authors[1].." & "..thisScript().authors[2].."\n\nАвтор: Narvell (Neax_Wayne) - http://narvell.pw/\nАвтор: qrlk (James_Bond Phil_Coulson) - http://rubbishman.ru/samp\n\n1. Исходный текст.\n2. Форматирование \"Классное\" (сортировка по порядковому номеру).\n3. Форматирование \"Классное\" (сортировка по активности за сутки).\n4. Форматирование \"Классное\" (сортировка по активности за неделю).\n5. Форматирование \"Классное\" (сортировка по дате последнего захода).\n6. Форматирование \"Классное\" (сортировка по рангу, ранг по порядковому номеру).\n7. Форматирование \"Классное\" (сортировка по рангу, ранг по активности за сутки).\n8. Форматирование \"Классное\" (сортировка по рангу, ранг по активности за неделю).\n9. Форматирование \"Классное\" (сортировка по рангу, ранг по дате последнего захода).\n\n"
     f = io.open(getGameDirectory()..'\\moonloader\\offmembers\\'..date..' '..time..'.log', "w+")
     if not f then
 			f = io.open(getGameDirectory()..'\\moonloader\\offmembers\\'..date..' '..time..'.log', "w")
@@ -415,7 +426,7 @@ function getMEM(nickname)
   else
     param = tostring(nickname)
     if param == "" then
-      sampShowDialog(5557, "\t"..chatTag.." by {FF5F5F}Narvell (Neax_Wayne){ffffff}, {348cb2}rubbishman (James_Bond, Phil_Coulson)", "{ffffff}["..chatTag.."]: Введите {348cb2}/omlog{ffffff}, чтобы спарсить {348cb2}/offmembers{ffffff} в текстовый файл.\n\n["..chatTag.."]: Введите {348cb2}/om NICK{ffffff}, чтобы найти игрока {348cb2}NICK{ffffff} в /offmembers.\n["..chatTag.."]: Введите {348cb2}/om 0-9999{ffffff}, чтобы найти игрока с номером {348cb2}0-9999{ffffff} в /offmembers.\n["..chatTag.."]: Введите {348cb2}/omid 0-999{ffffff}, чтобы найти игрока с id {348cb2}0-999{ffffff} в /offmembers.\n\n["..chatTag.."]: Введите {348cb2}/omrank 0-14{ffffff}, чтобы вывести всех игроков с рангом {348cb2}0-14{ffffff} в /offmembers.\n["..chatTag.."]: Введите {348cb2}/omdate 1-999{ffffff}, чтобы вывести всех игроков, неактивящих {348cb2}1-999{ffffff}+ дней.\n["..chatTag.."]: Введите {348cb2}/som TEXT{ffffff}, чтобы вывести всех игроков с {348cb2}TEXT{ffffff} в строчке /offmembers.\n\n["..chatTag.."]: Введите {348cb2}/omchangelog{ffffff}, чтобы узнать, что нового.", "OK")
+      sampShowDialog(5557, "\t"..chatTag.." by {FF5F5F}Narvell (Neax_Wayne){ffffff}, {348cb2}qrlk (James_Bond, Phil_Coulson)", "{ffffff}["..chatTag.."]: Введите {348cb2}/omlog{ffffff}, чтобы спарсить {348cb2}/offmembers{ffffff} в текстовый файл.\n\n["..chatTag.."]: Введите {348cb2}/om NICK{ffffff}, чтобы найти игрока {348cb2}NICK{ffffff} в /offmembers.\n["..chatTag.."]: Введите {348cb2}/om 0-9999{ffffff}, чтобы найти игрока с номером {348cb2}0-9999{ffffff} в /offmembers.\n["..chatTag.."]: Введите {348cb2}/omid 0-999{ffffff}, чтобы найти игрока с id {348cb2}0-999{ffffff} в /offmembers.\n\n["..chatTag.."]: Введите {348cb2}/omrank 0-14{ffffff}, чтобы вывести всех игроков с рангом {348cb2}0-14{ffffff} в /offmembers.\n["..chatTag.."]: Введите {348cb2}/omdate 1-999{ffffff}, чтобы вывести всех игроков, неактивящих {348cb2}1-999{ffffff}+ дней.\n["..chatTag.."]: Введите {348cb2}/som TEXT{ffffff}, чтобы вывести всех игроков с {348cb2}TEXT{ffffff} в строчке /offmembers.\n\n["..chatTag.."]: Введите {348cb2}/omchangelog{ffffff}, чтобы узнать, что нового.", "OK")
     else
       sampSendChat("/offmembers")
       wait(500)
@@ -755,7 +766,7 @@ function sort1(a, b)
 end
 --
 function changelog()
-  sampShowDialog(2342, chatTag.." "..thisScript().version, "{ffcc00}v1.2 [17.05.18]\n{ffffff}Фиксы, телеметрия.\n{ffcc00}v1.1 [24.11.17]\n{ffffff}Скрипт адаптирован под изменения диалога (пробел добавил кто-то). Нахуя?\nДобавлена возможность быстро адаптироваться к дальнейшим преколам.\n{ffcc00}v1.0 [23.11.17]\n{ffffff}Первый релиз скрипта.", "Закрыть")
+  sampShowDialog(2342, chatTag.." "..thisScript().version, script_changelog, "Закрыть")
 end
 --------------------------------------------------------------------------------
 ------------------------------------UPDATE--------------------------------------
