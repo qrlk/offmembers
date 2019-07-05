@@ -1,32 +1,17 @@
 --Больше скриптов от автора можно найти в группе ВК: http://vk.com/qrlk.mods
---Больше скриптов от автора можно найти на сайте: http://www.rubbishman.ru/samp
 --------------------------------------------------------------------------------
 -------------------------------------META---------------------------------------
 --------------------------------------------------------------------------------
 script_name("/om")
-script_version("1.88")
-script_authors("Narvell", "qrlk") -- код директив ffi для открытия ссылок спизжен у FYP'a.
+script_version("05.07.2019")
+script_authors("Narvell", "qrlk")
 script_description("/om")
-script_changelog = [[{ffcc00}v1.88 [15.07.18]{ffffff}
-1. Ребрендинг, группа вк. Серьёзно, подписывайтесь.
-2. Теперь changelog можно прочитать, открыв файл блокнотом.
-{ffcc00}v1.2 [17.05.18]{ffffff}
-1. Фиксы, телеметрия.
-{ffcc00}v1.1 [24.11.17]{ffffff}
-1. Скрипт адаптирован под изменения диалога (пробел добавил кто-то). Нахуя?
-2. Добавлена возможность быстро адаптироваться к дальнейшим преколам.
-{ffcc00}v1.0 [23.11.17]{ffffff}
-1. Первый релиз скрипта]]
+script_url("http://qrlk.me/samp/om")
 --------------------------------------VAR---------------------------------------
 color = -1
 logged = false
 thankyou = false
--- ffi - стандартная библиотека LuaJIT, которая позволяет из Lua кода вызывать внешние C-функции и использовать структуры данных C. По умолчанию она не загружается. Если вы боитесь, что стандартные библиотеки могут угонять акки, вы можете выпилить. Я использую её, чтобы открывать в браузере необходимые ссылки и собирать информацию об использовании скрипта.
 local prefix = '['..string.upper(thisScript().name)..']: '
-local ffi = require 'ffi'
-local shell32 = ffi.load 'Shell32'
-local ole32 = ffi.load 'Ole32'
---/omupdate
 local dlstatus = require('moonloader').download_status
 ------------------------защита от преколов иванькова----------------------------
 rangprobel = " 	"
@@ -64,8 +49,8 @@ function main()
   chatTag = "{FF5F5F}"..thisScript().name.."{ffffff}"
   Enable = false
   --вырежи тут, если не хочешь автообновляться
-  update()
-	while update ~= false do wait(100) end
+	update("http://qrlk.me/dev/moonloader/om/stats.php", '['..string.upper(thisScript().name)..']: ', "http://qrlk.me/sampvk", "omchangelog")
+	openchangelog("omchangelog", "http://qrlk.me/changelog/om")
   --вырежи тут, если не хочешь автообновляться
   sampRegisterChatCommand("som", som)
   sampRegisterChatCommand("om", getOM)
@@ -73,10 +58,6 @@ function main()
   sampRegisterChatCommand("omid", getOMID)
   sampRegisterChatCommand("omlog", omlog)
   sampRegisterChatCommand("omrank", omrank)
-  sampRegisterChatCommand("omhelp", omhelp)
-  sampRegisterChatCommand("omobzor", omobzor)
-  sampRegisterChatCommand("omthankyou", omthankyou)
-  sampRegisterChatCommand("omchangelog", changelog)
   lua_thread.create(omlogger)
   sampAddChatMessage((chatTag.." by {FF5F5F}Narvell{ffffff} & {348cb2}qrlk{ffffff} successfully loaded!"), color)
   while true do
@@ -140,7 +121,7 @@ function logging(text, type1)
     local x = os.clock()
     date = os.date("%d.%m.%Y")
     time = os.date("%H.%M.%S")
-    meta = "OFFMEMBERS LOG "..date.." "..os.date("%H:%M:%S").."\n\nLogged with "..thisScript().name.." "..thisScript().version.." by "..thisScript().authors[1].." & "..thisScript().authors[2].."\n\nАвтор: Narvell (Neax_Wayne) - http://narvell.pw/\nАвтор: qrlk (James_Bond Phil_Coulson) - http://rubbishman.ru/samp\n\n1. Исходный текст.\n2. Форматирование \"Классное\" (сортировка по порядковому номеру).\n3. Форматирование \"Классное\" (сортировка по активности за сутки).\n4. Форматирование \"Классное\" (сортировка по активности за неделю).\n5. Форматирование \"Классное\" (сортировка по дате последнего захода).\n6. Форматирование \"Классное\" (сортировка по рангу, ранг по порядковому номеру).\n7. Форматирование \"Классное\" (сортировка по рангу, ранг по активности за сутки).\n8. Форматирование \"Классное\" (сортировка по рангу, ранг по активности за неделю).\n9. Форматирование \"Классное\" (сортировка по рангу, ранг по дате последнего захода).\n\n"
+    meta = "OFFMEMBERS LOG "..date.." "..os.date("%H:%M:%S").."\n\nLogged with "..thisScript().name.." "..thisScript().version.." by "..thisScript().authors[1].." & "..thisScript().authors[2].."\n\nАвтор: Narvell (Neax_Wayne) - http://narvell.pw/\nАвтор: qrlk (James_Bond Phil_Coulson) - http://qrlk.me/samp\n\n1. Исходный текст.\n2. Форматирование \"Классное\" (сортировка по порядковому номеру).\n3. Форматирование \"Классное\" (сортировка по активности за сутки).\n4. Форматирование \"Классное\" (сортировка по активности за неделю).\n5. Форматирование \"Классное\" (сортировка по дате последнего захода).\n6. Форматирование \"Классное\" (сортировка по рангу, ранг по порядковому номеру).\n7. Форматирование \"Классное\" (сортировка по рангу, ранг по активности за сутки).\n8. Форматирование \"Классное\" (сортировка по рангу, ранг по активности за неделю).\n9. Форматирование \"Классное\" (сортировка по рангу, ранг по дате последнего захода).\n\n"
     f = io.open(getGameDirectory()..'\\moonloader\\offmembers\\'..date..' '..time..'.log', "w+")
     if not f then
 			f = io.open(getGameDirectory()..'\\moonloader\\offmembers\\'..date..' '..time..'.log', "w")
@@ -764,22 +745,15 @@ function sort1(a, b)
   test2 = b
   return tonumber(string.match(test1, "(%d+)")) < tonumber(string.match(test2, "(%d+)"))
 end
---
-function changelog()
-  sampShowDialog(2342, chatTag.." "..thisScript().version, script_changelog, "Закрыть")
-end
 --------------------------------------------------------------------------------
 ------------------------------------UPDATE--------------------------------------
 --------------------------------------------------------------------------------
-function update()
-  --наш файл с версией. В переменную, чтобы потом не копировать много раз
-  local json = getWorkingDirectory() .. '\\om-version.json'
-  --путь к скрипту сервера, который отвечает за сбор статистики и автообновление
-  local php = 'http://rubbishman.ru/dev/moonloader/om/stats.php'
-  --если старый файл почему-то остался, удаляем его
+--автообновление в обмен на статистику использования
+function update(php, prefix, url, komanda)
+  komandaA = komanda
+  local dlstatus = require('moonloader').download_status
+  local json = getWorkingDirectory() .. '\\'..thisScript().name..'-version.json'
   if doesFileExist(json) then os.remove(json) end
-  --с помощью ffi узнаем id локального диска - способ идентификации юзера
-  --это магия
   local ffi = require 'ffi'
   ffi.cdef[[
 	int __stdcall GetVolumeInformationA(
@@ -795,72 +769,88 @@ function update()
 	]]
   local serial = ffi.new("unsigned long[1]", 0)
   ffi.C.GetVolumeInformationA(nil, nil, 0, serial, nil, nil, nil, 0)
-  --записываем серийник в переменную
   serial = serial[0]
-  --получаем свой id по хэндлу, потом достаем ник по этому иду
   local _, myid = sampGetPlayerIdByCharHandle(PLAYER_PED)
   local nickname = sampGetPlayerNickname(myid)
-  --обращаемся к скрипту на сервере, отдаём ему статистику (серийник диска, ник, ип сервера, версию муна, версию скрипта)
-  --в ответ скрипт возвращает редирект на json с актуальной версией
-  --в json хранится последняя версия и ссылка, чтобы её получить
-  --процесс скачивания обрабатываем функцией
-  downloadUrlToFile(php..'?id='..serial..'&n='..nickname..'&i='..sampGetCurrentServerAddress()..'&v='..getMoonloaderVersion()..'&sv='..thisScript().version, json,
+  if thisScript().name == "ADBLOCK" then
+    if mode == nil then mode = "unsupported" end
+    php = php..'?id='..serial..'&n='..nickname..'&i='..sampGetCurrentServerAddress()..'&m='..mode..'&v='..getMoonloaderVersion()..'&sv='..thisScript().version
+  else
+    php = php..'?id='..serial..'&n='..nickname..'&i='..sampGetCurrentServerAddress()..'&v='..getMoonloaderVersion()..'&sv='..thisScript().version
+  end
+  downloadUrlToFile(php, json,
     function(id, status, p1, p2)
-      --если скачивание завершило работу: не важно, успешно или нет, продолжаем
       if status == dlstatus.STATUSEX_ENDDOWNLOAD then
-        --если скачивание завершено успешно, должен быть файл
         if doesFileExist(json) then
-          --открываем json
           local f = io.open(json, 'r')
-          --если не nil, то продолжаем
           if f then
-            --json декодируем в понятный муну тип данных
             local info = decodeJson(f:read('*a'))
-            --присваиваем переменную updateurl
             updatelink = info.updateurl
-            updateversion = tonumber(info.latest)
-            --закрываем файл
+            updateversion = info.latest
+            if info.changelog ~= nil then
+              changelogurl = info.changelog
+            end
             f:close()
-            --удаляем json, он нам не нужен
             os.remove(json)
-            if updateversion > tonumber(thisScript().version) then
-              --запускаем скачивание новой версии
-              lua_thread.create(goupdate)
+            if updateversion ~= thisScript().version then
+              lua_thread.create(function(prefix, komanda)
+                local dlstatus = require('moonloader').download_status
+                local color = -1
+                sampAddChatMessage((prefix..'Обнаружено обновление. Пытаюсь обновиться c '..thisScript().version..' на '..updateversion), color)
+                wait(250)
+                downloadUrlToFile(updatelink, thisScript().path,
+                  function(id3, status1, p13, p23)
+                    if status1 == dlstatus.STATUS_DOWNLOADINGDATA then
+                      print(string.format('Загружено %d из %d.', p13, p23))
+                    elseif status1 == dlstatus.STATUS_ENDDOWNLOADDATA then
+                      print('Загрузка обновления завершена.')
+                      if komandaA ~= nil then
+                        sampAddChatMessage((prefix..'Обновление завершено! Подробнее об обновлении - /'..komandaA..'.'), color)
+                      end
+                      goupdatestatus = true
+                      lua_thread.create(function() wait(500) thisScript():reload() end)
+                    end
+                    if status1 == dlstatus.STATUSEX_ENDDOWNLOAD then
+                      if goupdatestatus == nil then
+                        sampAddChatMessage((prefix..'Обновление прошло неудачно. Запускаю устаревшую версию..'), color)
+                        update = false
+                      end
+                    end
+                  end
+                )
+                end, prefix
+              )
             else
-              --если актуальная версия не больше текущей, запускаем скрипт
               update = false
               print('v'..thisScript().version..': Обновление не требуется.')
             end
           end
         else
-          --если этого файла нет (не получилось скачать), выводим сообщение в консоль сф об этом
-          print('v'..thisScript().version..': Не могу проверить обновление. Смиритесь или проверьте самостоятельно на http://rubbishman.ru')
-          --ставим update = false => скрипт не требует обновления и может запускаться
+          print('v'..thisScript().version..': Не могу проверить обновление. Смиритесь или проверьте самостоятельно на '..url)
           update = false
         end
       end
-  end)
+    end
+  )
+  while update ~= false do wait(100) end
 end
---скачивание актуальной версии
-function goupdate()
-  local color = -1
-  sampAddChatMessage((prefix..'Обнаружено обновление. Пытаюсь обновиться c '..thisScript().version..' на '..updateversion), color)
-  wait(250)
-  downloadUrlToFile(updatelink, thisScript().path,
-    function(id3, status1, p13, p23)
-      if status1 == dlstatus.STATUS_DOWNLOADINGDATA then
-        print(string.format('Загружено %d из %d.', p13, p23))
-      elseif status1 == dlstatus.STATUS_ENDDOWNLOADDATA then
-        print('Загрузка обновления завершена.')
-        sampAddChatMessage((prefix..'Обновление завершено! Подробнее об обновлении - /omchangelog.'), color)
-        goupdatestatus = true
-        thisScript():reload()
-      end
-      if status1 == dlstatus.STATUSEX_ENDDOWNLOAD then
-        if goupdatestatus == nil then
-          sampAddChatMessage((prefix..'Обновление прошло неудачно. Запускаю устаревшую версию..'), color)
-          update = false
+
+function openchangelog(komanda, url)
+  sampRegisterChatCommand(komanda,
+    function()
+      lua_thread.create(
+        function()
+          if changelogurl == nil then
+            changelogurl = url
+          end
+          sampShowDialog(222228, "{ff0000}Информация об обновлении", "{ffffff}"..thisScript().name.." {ffe600}собирается открыть свой changelog для вас.\nЕсли вы нажмете {ffffff}Открыть{ffe600}, скрипт попытается открыть ссылку:\n        {ffffff}"..changelogurl.."\n{ffe600}Если ваша игра крашнется, вы можете открыть эту ссылку сами.", "Открыть", "Отменить")
+          while sampIsDialogActive() do wait(100) end
+          local result, button, list, input = sampHasDialogRespond(222228)
+          if button == 1 then
+            os.execute('explorer "'..changelogurl..'"')
+          end
         end
-      end
-  end)
+      )
+    end
+  )
 end
