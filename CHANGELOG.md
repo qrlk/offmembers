@@ -6,14 +6,14 @@
   * [ссылка](https://raw.githubusercontent.com/qrlk/offmembers/64552c2b52e52242e5f1d0f020c0d93af726ac81/!offmembers.lua)
 * **OFFMEMBERS v1.88 от 15.07.2018:**
   * **NEW:** Добавлена одноразовая реклама группы. 
-  * **UPD: '''Изменён ник автора. 
+  * **UPD:** Изменён ник автора. 
   * [ссылка](https://raw.githubusercontent.com/qrlk/offmembers/94eebe45812600bcc2b634cdd6597a72b7122fc9/!offmembers.lua)
 * **OFFMEMBERS v1.86 от 29.06.2018:'''
   * **FIX:** Исправления автообновления.
   * **UPD:** Ручная проверка обновлений заменена автоматической. 
   * [ссылка](https://raw.githubusercontent.com/qrlk/offmembers/c41f03b1697e4e665afad8e9e26e232446141c42/!offmembers.lua)
 * **OFFMEMBERS v1.3 от 17.05.2018:**
-  * **NEW: '''Добавлена телеметрия.
+  * **NEW:** Добавлена телеметрия.
   * **FIX:** Исправления автообновления.
   * **FIX:** Мелкие фиксы. 
   * [ссылка](https://raw.githubusercontent.com/qrlk/offmembers/11c62234cf6a4b772ee735c94e8c838dfcef924b/!adblock.lua)
