@@ -8,7 +8,7 @@
   * **NEW:** Добавлена одноразовая реклама группы. 
   * **UPD:** Изменён ник автора. 
   * [ссылка](https://raw.githubusercontent.com/qrlk/offmembers/94eebe45812600bcc2b634cdd6597a72b7122fc9/!offmembers.lua)
-* **OFFMEMBERS v1.86 от 29.06.2018:'''
+* **OFFMEMBERS v1.86 от 29.06.2018:**
   * **FIX:** Исправления автообновления.
   * **UPD:** Ручная проверка обновлений заменена автоматической. 
   * [ссылка](https://raw.githubusercontent.com/qrlk/offmembers/c41f03b1697e4e665afad8e9e26e232446141c42/!offmembers.lua)
