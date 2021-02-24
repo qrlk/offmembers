@@ -1,3 +1,31 @@
+<h1 align="center">offmembers</h1>
+
+<p align="center">
+
+<img src="https://img.shields.io/badge/made%20for-GTA%20SA--MP-blue" >
+
+<img src="https://img.shields.io/badge/Server-Any-red">
+
+<img src="https://img.shields.io/github/languages/top/qrlk/offmembers">
+
+<img src="https://img.shields.io/badge/dynamic/json?color=blueviolet&label=users%20%28active%29&query=result&url=http%3A%2F%2Fqrlk.me%2Fdev%2Fmoonloader%2Fusers_active.php%3Fscript%3Dom">
+
+<img src="https://img.shields.io/badge/dynamic/json?color=blueviolet&label=users%20%28all%20time%29&query=result&url=http%3A%2F%2Fqrlk.me%2Fdev%2Fmoonloader%2Fusers_all.php%3Fscript%3Dom">
+
+<img src="https://img.shields.io/date/1511384400?label=released" >
+
+</p>
+
+A **[moonloader](https://gtaforums.com/topic/890987-moonloader/)** script that simplifies interaction with the faction's players list. 
+
+It is useful for the **[Samp-Rp](https://samp-rp.ru/)** administration, faction leaders and their deputies.
+
+Requires **[CLEO 4+](http://cleo.li/?lang=ru)** and **[SAMPFUNCS 5+](https://blast.hk/threads/17/)**.
+
+---
+
+**The following description is in Russian, because it is the main language of the user base**.
+
 # Описание 
 Многие знают об обновленном оффмемберсе Samp-Rp, но не многие знают, насколько он неудобен для пользования. Неудобно искать людей, неудобно выделять неактивщиков/задротов, неудобно заполнять состав на форуме, неудобно листать страницы (особенно когда их 20+, а в оффмемберсе больше 1000 игроков).  
 К счастью, новый /offmembers легко спарсить, для чего и был написан этот скрипт.  
@@ -8,7 +36,7 @@
 
 * /om - открыть диалог скрипта с командами.
 
-**Автор:** [qrlk (James_Bond / Phil_Coulson)](http://rubbishman.ru/samp).  
+**Автор:** [qrlk](http://rubbishman.ru/samp).  
 **Обсуждение в группе VK:** [ссылка](https://vk.com/topic-168860334_38597264).
 
 # Скриншоты
