@@ -38,7 +38,7 @@ Requires **[CLEO 4+](http://cleo.li/?lang=ru)** and **[SAMPFUNCS 5+](https://bla
 
 * /om - открыть диалог скрипта с командами.
 
-**Автор:** [qrlk](http://rubbishman.ru/samp).  
+**Автор:** [qrlk](http://qrlk.me/samp).  
 **Обсуждение в группе VK:** [ссылка](https://vk.com/topic-168860334_38597264).
 
 # Скриншоты
