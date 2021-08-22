@@ -49,8 +49,8 @@ function main()
   chatTag = "{FF5F5F}"..thisScript().name.."{ffffff}"
   Enable = false
   --вырежи тут, если не хочешь автообновляться
-	update("http://qrlk.me/dev/moonloader/om/stats.php", '['..string.upper(thisScript().name)..']: ', "http://qrlk.me/sampvk", "omchangelog")
-	openchangelog("omchangelog", "http://qrlk.me/changelog/om")
+  update("http://qrlk.me/dev/moonloader/om/stats.php", '['..string.upper(thisScript().name)..']: ', "http://qrlk.me/sampvk", "omchangelog")
+  openchangelog("omchangelog", "http://qrlk.me/changelog/om")
   --вырежи тут, если не хочешь автообновляться
   sampRegisterChatCommand("som", som)
   sampRegisterChatCommand("om", getOM)
@@ -124,7 +124,7 @@ function logging(text, type1)
     meta = "OFFMEMBERS LOG "..date.." "..os.date("%H:%M:%S").."\n\nLogged with "..thisScript().name.." "..thisScript().version.." by "..thisScript().authors[1].." & "..thisScript().authors[2].."\n\nАвтор: Narvell (Neax_Wayne) - http://narvell.pw/\nАвтор: qrlk (James_Bond Phil_Coulson) - http://qrlk.me/samp\n\n1. Исходный текст.\n2. Форматирование \"Классное\" (сортировка по порядковому номеру).\n3. Форматирование \"Классное\" (сортировка по активности за сутки).\n4. Форматирование \"Классное\" (сортировка по активности за неделю).\n5. Форматирование \"Классное\" (сортировка по дате последнего захода).\n6. Форматирование \"Классное\" (сортировка по рангу, ранг по порядковому номеру).\n7. Форматирование \"Классное\" (сортировка по рангу, ранг по активности за сутки).\n8. Форматирование \"Классное\" (сортировка по рангу, ранг по активности за неделю).\n9. Форматирование \"Классное\" (сортировка по рангу, ранг по дате последнего захода).\n\n"
     f = io.open(getGameDirectory()..'\\moonloader\\offmembers\\'..date..' '..time..'.log', "w+")
     if not f then
-			f = io.open(getGameDirectory()..'\\moonloader\\offmembers\\'..date..' '..time..'.log', "w")
+      f = io.open(getGameDirectory()..'\\moonloader\\offmembers\\'..date..' '..time..'.log', "w")
     end
     textt = ""
     for w in string.gmatch(text, "(.-)\n") do -- Перебирает весь текст в переменной textt, занося каждую строку в переменную w.
