@@ -6,7 +6,7 @@ script_name("/om")
 script_version("05.07.2019")
 script_authors("Narvell", "qrlk")
 script_description("/om")
-script_url("http://qrlk.me/samp/om")
+script_url("https://github.com/qrlk/offmembers")
 --------------------------------------VAR---------------------------------------
 color = -1
 logged = false
