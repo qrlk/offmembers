@@ -1,5 +1,6 @@
 {
   "latest": "05.07.2019",
   "updateurl": "https://raw.githubusercontent.com/qrlk/offmembers/master/!offmembers.lua",
-  "changelog": "https://github.com/qrlk/offmembers/blob/master/CHANGELOG.md"
+  "changelog": "https://github.com/qrlk/offmembers/blob/master/CHANGELOG.md",
+  "telemetry": "http://qrlk.me/dev/moonloader/om/stats.php"
 }
