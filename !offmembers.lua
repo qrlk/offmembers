@@ -3,7 +3,7 @@ require 'lib.moonloader'
 -------------------------------------META---------------------------------------
 --------------------------------------------------------------------------------
 script_name("/om")
-script_version("05.07.2019")
+script_version("25.06.2022")
 script_authors("Narvell", "qrlk")
 script_description("/om")
 script_url("https://github.com/qrlk/offmembers")
